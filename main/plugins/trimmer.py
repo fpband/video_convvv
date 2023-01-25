@@ -28,7 +28,7 @@ from LOCAL.localisation import SUPPORT_LINK, JPG, JPG2, JPG3
 
 async def trim(event, msg, st, et):
     Drone = event.client
-    edit = await Drone.send_message(event.chat_id, "Trying to process.", reply_to=msg.id)
+    edit = await Drone.send_message(event.chat_id, "در حال انجام عملیات...", reply_to=msg.id)
     new_name = "out_" + dt.now().isoformat("_", "seconds")
     if hasattr(msg.media, "document"):
         file = msg.media.document
@@ -53,12 +53,12 @@ async def trim(event, msg, st, et):
         out = new_name + ext
     DT = time.time()
     try:
-        await fast_download(name, file, Drone, edit, DT, "**DOWNLOADING:**")
+        await fast_download(name, file, Drone, edit, DT, "**📥 در حال بارگیری ویدیو...**")
     except Exception as e:
         print(e)
         return await edit.edit(f"An error occured while downloading.\n\nContact [SUPPORT]({SUPPORT_LINK})", link_preview=False) 
     try:
-        await edit.edit("Trimming.")
+        await edit.edit("✂️ در حال انجام عملیات برش ویدیو...")
         bash(f'ffmpeg -i {name} -ss {st} -to {et} -acodec copy -vcodec copy {out}')
         out2 = new_name + '_2_' + '.mp4'
         rename(out, out2)
@@ -66,7 +66,7 @@ async def trim(event, msg, st, et):
         print(e)
         return await edit.edit(f"An error occured while trimming!\n\nContact [SUPPORT]({SUPPORT_LINK})", link_preview=False)
     UT = time.time()
-    text = f"**TRIMMED by :** @{BOT_UN}"
+    text = f"**✅ @{BOT_UN} **"
     try:
         metadata = video_metadata(out2)
         width = metadata["width"]
